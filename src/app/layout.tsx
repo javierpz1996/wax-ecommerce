@@ -49,7 +49,7 @@ export default function RootLayout({
       >
         <div className="min-h-dvh bg-white text-black dark:bg-black dark:text-white">
           <Navbar />
-          <main className="mx-auto w-full px-6 py-10">{children}</main>
+          <main className="mx-auto w-full">{children}</main>
           <Footbar />
         </div>
       </body>

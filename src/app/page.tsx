@@ -1,18 +1,9 @@
-import { Hero } from "../components/Hero";
-import { ProductCarousel } from "../components/ProductCarousel";
-import { CategoriesSection } from "../components/CategoriesSection";
-import { FaqSection } from "../components/FaqSection";
-import { productSections } from "../typos/products";
+import { MobileDashboard } from "../components/MobileDashboard";
 
 export default function Home() {
   return (
-    <div className="space-y-10 sm:space-y-12">
-      <CategoriesSection />
-      <Hero />
-      <div id="productos" className="space-y-6">
-        <ProductCarousel sections={productSections} />
-      </div>
-      <FaqSection />
+    <div className="flex min-h-screen items-center justify-center bg-[var(--pac-dark)] md:px-6 md:py-10 lg:px-8 lg:py-12">
+      <MobileDashboard />
     </div>
   );
 }

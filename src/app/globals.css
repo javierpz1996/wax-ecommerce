@@ -3,6 +3,14 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --pac-yellow: #FFE600;
+  --pac-dark: #000000;
+  --pac-screen: #0a0a14;
+  --pac-blue: #00BFFF;
+  --pac-red: #FF0000;
+  --pac-pink: #FF69B4;
+  --pac-orange: #FFA500;
+  --pac-outline: #00004C;
 }
 
 @theme inline {
@@ -34,4 +42,19 @@ body {
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee {
+  display: inline-block;
+  min-width: 200%;
+  animation: marquee 18s linear infinite;
 }
