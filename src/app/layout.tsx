@@ -1,12 +1,17 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono,Bebas_Neue,Roboto } from "next/font/google";
 import "./globals.css";
-import { Navbar } from "../components/Navbar";
-import { Footbar } from "../components/Footbar";
+import { Pixelify_Sans } from "next/font/google";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+});
+
+const pixelify = Pixelify_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"], // elegí los pesos que necesites
+  variable: "--font-pixelify", // opcional si usás Tailwind
 });
 
 const geistMono = Geist_Mono({
@@ -44,13 +49,14 @@ export default function RootLayout({
             ${geistMono.variable} 
             ${bebas.variable} 
             ${roboto.variable} 
+            ${pixelify.variable} 
             antialiased
           `}
       >
         <div className="min-h-dvh bg-white text-black dark:bg-black dark:text-white">
-          <Navbar />
+         
           <main className="mx-auto w-full">{children}</main>
-          <Footbar />
+        
         </div>
       </body>
     </html>

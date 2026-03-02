@@ -20,6 +20,7 @@
   --font-mono: var(--font-geist-mono);
   --font-bebas: var(--font-bebas);
   --font-roboto: var(--font-roboto);
+  --font-pixelify: var(--font-pixelify);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -56,5 +57,20 @@ body {
 .marquee {
   display: inline-block;
   min-width: 200%;
-  animation: marquee 18s linear infinite;
+  animation: marquee 19s linear infinite;
+}
+
+@keyframes neonPulse {
+  0%, 100% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 0.85;
+    filter: brightness(1.4);
+  }
+}
+
+.animate-neon {
+  animation: neonPulse 2s ease-in-out infinite;
 }

@@ -4,13 +4,7 @@ type InfoTextProps = {
 
 const defaultContent = (
   <>
-    <p>
-      Lugar para texto informativo. Podés explicar cómo funciona el menú,
-      horarios de atención o condiciones de envío.
-    </p>
-    <p>
-      Este módulo se adapta a celular, tablet y desktop.
-    </p>
+
   </>
 );
 
