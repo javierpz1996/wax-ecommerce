@@ -4,35 +4,37 @@ type CurrentNumberDisplayProps = {
 
 export function CurrentNumberDisplay({ number }: CurrentNumberDisplayProps) {
   return (
-    <div className="mt-8 flex flex-col items-center gap-4">
-      
+    <div className="mt-8 flex flex-col items-center gap-3">
+
       <p
-        className="text-center font-bold font-pixelify uppercase tracking-[0.25em]"
-        style={{
-          color: "rgb(255,105,180)",
-          textShadow: `
-            0 0 6px rgb(255,105,180),
-            0 0 12px rgba(255,105,180,0.8),
-            0 0 24px rgba(255,105,180,0.6)
-          `,
-        }}
+        className="text-center font-bold font-pixelify uppercase tracking-[0.3em] text-sm"
       >
-        Nuestro número
+        Número actual
       </p>
 
       <div
-        className="w-full max-w-xs text-center rounded-xl bg-black px-8 py-5 text-lg font-bold tracking-widest transition-all duration-300 hover:scale-105"
+        className="
+          w-full 
+          max-w-[260px] 
+          text-center 
+          rounded-xl 
+          px-6 
+          py-3 
+          text-base 
+          font-bold 
+          tracking-widest 
+          transition-all 
+          duration-300 
+          hover:scale-105
+          backdrop-blur-md
+        "
         style={{
-          color: "rgb(255,105,180)",
-          border: "2px solid rgb(255,105,180)",
-          textShadow: `
-            0 0 8px rgb(255,105,180),
-            0 0 18px rgba(255,105,180,0.9),
-            0 0 30px rgba(255,105,180,0.6)
-          `,
+          background: "linear-gradient(135deg, rgba(147,51,234,0.35), rgba(0,229,255,0.35))",
+          border: "1px solid rgba(147,51,234,0.6)",
+          color: "#ffffff",
           boxShadow: `
-            0 0 15px rgba(255,105,180,0.6),
-            0 0 40px rgba(255,105,180,0.4)
+            0 0 30px rgba(147,51,234,0.45),
+            inset 0 0 25px rgba(0,229,255,0.25)
           `,
         }}
       >

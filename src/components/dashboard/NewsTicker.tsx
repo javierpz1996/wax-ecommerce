@@ -3,10 +3,10 @@ type NewsTickerProps = {
 };
 
 export function NewsTicker({
-  text = "Promos activas esta semana · Stock limitado · Escríbenos por WhatsApp para pedidos personalizados.",
+  text = "Promos activas esta semana Stock limitado Escríbenos por WhatsApp para pedidos personalizados",
 }: NewsTickerProps) {
   return (
-    <div className="overflow-hidden rounded-md border-2 border-pink-500 bg-black px-4 py-3 text-[15px] uppercase tracking-widest text-pink-400 shadow-[0_0_25px_rgba(255,0,150,0.8),inset_0_0_15px_rgba(255,0,150,0.4)]">
+    <div className="overflow-hidden rounded-md border-2 border-pink-500 bg-black px-4 py-2 text-[13px] uppercase tracking-widest text-pink-400 shadow-[0_0_25px_rgba(255,0,150,0.8),inset_0_0_15px_rgba(255,0,150,0.4)]">
       
       <div className="marquee whitespace-nowrap">
 

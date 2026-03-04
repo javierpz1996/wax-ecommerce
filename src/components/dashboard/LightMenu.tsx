@@ -26,7 +26,7 @@ export function LightMenu({
   const iconList = icons.slice(0, count);
 
   return (
-    <div className="space-y-3 md:space-y-4">
+    <div className="space-y-3 md:space-y-4 text-center">
       <p className="text-lg font-pixelify font-medium uppercase tracking-widest text-[var(--pac-yellow)]">
         Menú
       </p>
