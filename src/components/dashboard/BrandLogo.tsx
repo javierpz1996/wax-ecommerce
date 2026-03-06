@@ -10,7 +10,7 @@ export function BrandLogo({
   alt = "Logo de la marca",
 }: BrandLogoProps) {
   return (
-    <div className="relative flex items-center justify-center mt-4">
+    <div className="relative flex items-center justify-center">
       
       {/* Glow profundo */}
       <div className="absolute h-30 w-50 md:h-72 md:w-72 rounded-full bg-emerald-500/20 blur-3xl" />

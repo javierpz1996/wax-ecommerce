@@ -4,35 +4,58 @@ type WhatsappButtonProps = {
 };
 
 export function WhatsappButton({
-  label = "Escribir por WhatsApp",
+  label = "Escribinos por WhatsApp",
   href = "https://wa.me/5491112345678",
 }: WhatsappButtonProps) {
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="mt-3 group flex w-full items-center justify-center gap-3 rounded-full px-8 py-4 text-sm md:text-base font-bold text-black transition-all duration-300 hover:scale-105"
-      style={{
-        background: "linear-gradient(90deg, #00ff88, #00ff66)",
-        boxShadow: "0 0 20px #00ff88, 0 0 40px rgba(0,255,136,0.6)",
-      }}
-    >
-      {/* Icono sin fondo */}
-      <svg
-        viewBox="0 0 24 24"
-        className="h-5 w-5"
-        aria-hidden="true"
+    <div className="mt-6 flex justify-center">
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group relative w-full max-w-[260px]"
       >
-        <path
-          fill="currentColor"
-          d="M20.52 3.48A11.77 11.77 0 0 0 12.04 0C5.74.03.6 5.2.62 11.49c0 2.03.53 4 1.54 5.74L0 24l7-2.11a11.9 11.9 0 0 0 5.03 1.14h.01c6.3-.03 11.44-5.2 11.42-11.5a11.7 11.7 0 0 0-3.94-7.95m-8.48 17.3h-.01c-1.6 0-3.17-.43-4.54-1.24l-.33-.2-4.16 1.25 1.28-4.05-.22-.34a9.37 9.37 0 0 1-1.45-5.02C2.6 6.38 6.7 2.3 12 2.3c2.48 0 4.81.97 6.57 2.73a9.2 9.2 0 0 1 2.72 6.57c.01 5.31-4.08 9.4-9.25 9.42m5.08-7.07c-.28-.14-1.66-.82-1.92-.91-.26-.1-.45-.14-.64.14-.19.28-.73.9-.9 1.08-.17.19-.33.21-.61.07-.28-.14-1.18-.43-2.25-1.37-.83-.74-1.39-1.65-1.55-1.93-.16-.28-.02-.43.12-.57.12-.12.28-.33.41-.5.14-.17.19-.28.28-.47.09-.19.05-.35-.02-.5-.07-.14-.64-1.54-.88-2.1-.23-.55-.46-.47-.64-.48h-.55c-.19 0-.5.07-.76.35-.26.28-1 1-1 2.43 0 1.43 1.03 2.8 1.18 2.99.14.19 2.03 3.21 4.92 4.5.69.3 1.23.48 1.65.61.69.22 1.32.19 1.82.12.56-.08 1.66-.68 1.9-1.34.24-.66.24-1.22.17-1.34-.07-.12-.26-.19-.54-.33"
-        />
-      </svg>
+        {/* Glow exterior */}
+        <div className="absolute -inset-[2px] rounded-xl bg-gradient-to-r from-green-400 via-green-500 to-emerald-500 opacity-70 blur-md transition duration-300 group-hover:opacity-100" />
 
-      <span className="tracking-wide">
-        {label}
-      </span>
-    </a>
+        {/* Botón */}
+        <div
+          className="
+            relative
+            flex
+            items-center
+            justify-center
+            gap-2
+            rounded-xl
+            bg-black
+            px-6
+            py-3
+            text-sm
+            font-bold
+            tracking-wide
+            border border-white/10
+            transition-all
+            duration-300
+            group-hover:scale-105
+          "
+        >
+          {/* Icono WhatsApp real */}
+          <svg
+            viewBox="0 0 32 32"
+            className="h-4 w-4 text-green-400 drop-shadow-[0_0_6px_#22c55e]"
+            aria-hidden="true"
+          >
+            <path
+              fill="currentColor"
+              d="M16 .4C7.4.4.4 7.4.4 16c0 2.8.7 5.4 2.1 7.8L0 32l8.4-2.5c2.3 1.2 4.8 1.9 7.6 1.9 8.6 0 15.6-7 15.6-15.6S24.6.4 16 .4zm0 28.3c-2.4 0-4.7-.6-6.7-1.8l-.5-.3-5 1.5 1.5-4.8-.3-.5C3.8 20.7 3.2 18.4 3.2 16 3.2 8.8 8.8 3.2 16 3.2S28.8 8.8 28.8 16 23.2 28.7 16 28.7zm7.2-9.7c-.4-.2-2.2-1.1-2.5-1.2-.3-.1-.6-.2-.8.2-.2.3-.9 1.2-1.1 1.4-.2.2-.4.3-.8.1-.4-.2-1.6-.6-3-1.9-1.1-1-1.9-2.2-2.1-2.6-.2-.4 0-.6.2-.8.2-.2.4-.5.6-.7.2-.2.2-.4.4-.6.1-.2.1-.5 0-.7-.1-.2-.8-2-1.1-2.7-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.6.1-.9.4-.3.3-1.2 1.1-1.2 2.8 0 1.6 1.2 3.2 1.4 3.4.2.2 2.3 3.6 5.6 5 .8.3 1.3.5 1.8.7.8.3 1.6.3 2.2.2.7-.1 2.2-.9 2.5-1.7.3-.8.3-1.5.2-1.7-.1-.2-.3-.3-.7-.5z"
+            />
+          </svg>
+
+          <span className="bg-gradient-to-r from-green-300 via-green-400 to-emerald-300 bg-clip-text text-transparent drop-shadow-[0_0_6px_#22c55e]">
+            {label}
+          </span>
+        </div>
+      </a>
+    </div>
   );
 }
