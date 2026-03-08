@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { useLightMenuEnabled } from "../../hooks/useLightMenuEnabled";
+import { useLogoUrl } from "../../hooks/useLogoUrl";
 
 const LIGHT_LABELS = ["Luz 1", "Luz 2", "Luz 3", "Luz 4", "Luz 5"];
 const LIGHT_COLORS = [
@@ -14,6 +16,26 @@ const LIGHT_COLORS = [
 
 export default function PanelPage() {
   const { enabled, setLightEnabled } = useLightMenuEnabled();
+  const { storedUrl, setLogoUrl, loading: logoLoading } = useLogoUrl();
+  const [logoInput, setLogoInput] = useState("");
+  const [logoSaving, setLogoSaving] = useState(false);
+  const [logoMessage, setLogoMessage] = useState<"ok" | "error" | null>(null);
+
+  const handleLogoSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLogoMessage(null);
+    setLogoSaving(true);
+    try {
+      const url = logoInput.trim() || null;
+      await setLogoUrl(url);
+      setLogoMessage("ok");
+      if (!url) setLogoInput("");
+    } catch {
+      setLogoMessage("error");
+    } finally {
+      setLogoSaving(false);
+    }
+  };
 
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col gap-8 px-6 py-10">
@@ -28,6 +50,55 @@ export default function PanelPage() {
           Volver
         </Link>
       </div>
+
+      <section className="rounded-lg bg-[var(--pac-screen)] p-6 shadow-lg">
+        <h2 className="mb-4 font-pixelify text-lg uppercase tracking-wide text-white/90">
+          Logo
+        </h2>
+        <p className="mb-4 text-sm text-white/60">
+          Ingresá la URL de una imagen para cambiar el logo de la página principal.
+        </p>
+        <form onSubmit={handleLogoSubmit} className="space-y-3">
+          <input
+            type="url"
+            value={logoInput}
+            onChange={(e) => setLogoInput(e.target.value)}
+            onFocus={() => !logoLoading && setLogoInput(storedUrl ?? "")}
+            placeholder={logoLoading ? "Cargando…" : storedUrl || "https://ejemplo.com/logo.png"}
+            className="w-full rounded-md border border-white/20 bg-black/40 px-3 py-2 text-sm text-white placeholder-white/40 outline-none focus:border-[var(--pac-yellow)]"
+            disabled={logoLoading}
+          />
+          <div className="flex items-center gap-3">
+            <button
+              type="submit"
+              disabled={logoLoading || logoSaving}
+              className="rounded-md bg-[var(--pac-yellow)] px-4 py-2 text-sm font-bold text-black transition hover:opacity-90 disabled:opacity-50"
+            >
+              {logoSaving ? "Guardando…" : "Guardar logo"}
+            </button>
+            {storedUrl && (
+              <button
+                type="button"
+                onClick={() => {
+                  setLogoInput("");
+                  setLogoUrl(null);
+                  setLogoMessage("ok");
+                }}
+                disabled={logoLoading || logoSaving}
+                className="text-sm text-white/60 underline hover:text-white disabled:opacity-50"
+              >
+                Restaurar default
+              </button>
+            )}
+          </div>
+          {logoMessage === "ok" && (
+            <p className="text-sm text-emerald-400">Logo actualizado.</p>
+          )}
+          {logoMessage === "error" && (
+            <p className="text-sm text-red-400">No se pudo guardar.</p>
+          )}
+        </form>
+      </section>
 
       <section className="rounded-lg bg-[var(--pac-screen)] p-6 shadow-lg">
         <h2 className="mb-4 font-pixelify text-lg uppercase tracking-wide text-white/90">

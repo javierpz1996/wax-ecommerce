@@ -40,7 +40,7 @@ El estado de las luces del menú se guarda en Supabase para que funcione en Verc
    NEXT_PUBLIC_SUPABASE_URL=https://tu-proyecto.supabase.co
    NEXT_PUBLIC_SUPABASE_ANON_KEY=tu-anon-key
    ```
-4. En Supabase: **SQL Editor** → ejecutá el contenido de `supabase/migrations/20250305000000_create_lights_state.sql`.
+4. En Supabase: **SQL Editor** → ejecutá el contenido de `supabase/migrations/20250305000000_create_lights_state.sql` y luego el de `supabase/migrations/20250305000001_create_logo_config.sql` (para el logo).
 5. En Vercel: añadí las mismas variables en **Settings → Environment Variables**.
 
 ## Deploy on Vercel
