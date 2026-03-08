@@ -29,6 +29,20 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
+## Supabase (estado del panel de luces)
+
+El estado de las luces del menú se guarda en Supabase para que funcione en Vercel.
+
+1. Creá un proyecto en [Supabase](https://supabase.com).
+2. En el proyecto: **Settings → API** copiá la **Project URL** y la **anon public** key.
+3. Creá un archivo `.env.local` en la raíz con:
+   ```
+   NEXT_PUBLIC_SUPABASE_URL=https://tu-proyecto.supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=tu-anon-key
+   ```
+4. En Supabase: **SQL Editor** → ejecutá el contenido de `supabase/migrations/20250305000000_create_lights_state.sql`.
+5. En Vercel: añadí las mismas variables en **Settings → Environment Variables**.
+
 ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.

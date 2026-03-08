@@ -15,6 +15,8 @@ type LightMenuProps = {
   activeIndex: number | null;
   onToggle: (index: number) => void;
   icons?: string[];
+  /** Si no se pasa, todos los botones están habilitados. Solo el panel puede cambiar esto. */
+  enabled?: boolean[];
 };
 
 export function LightMenu({
@@ -22,8 +24,10 @@ export function LightMenu({
   activeIndex,
   onToggle,
   icons = DEFAULT_ICONS,
+  enabled: enabledProp,
 }: LightMenuProps) {
   const iconList = icons.slice(0, count);
+  const enabled = enabledProp ?? Array.from({ length: count }, () => true);
 
   return (
     <div className="space-y-3 md:space-y-4 text-center">
@@ -33,7 +37,7 @@ export function LightMenu({
 
       <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
         {Array.from({ length: count }).map((_, index) => {
-          const isOn = activeIndex === index;
+          const isEnabled = enabled[index] !== false;
           const iconSrc = iconList[index];
 
           const colors = [
@@ -46,14 +50,18 @@ export function LightMenu({
 
           const c = colors[index % colors.length];
 
+          /* Habilitadas = luz prendida (glow). Deshabilitadas = estilo apagado, no clickeable. */
+          const showAsOn = isEnabled;
+
           return (
             <button
               key={index}
               type="button"
-              onClick={() => onToggle(index)}
+              disabled={!isEnabled}
+              onClick={() => isEnabled && onToggle(index)}
               className="relative flex size-11 md:size-12 items-center justify-center overflow-hidden border-2 transition-all duration-300"
               style={
-                isOn
+                showAsOn
                   ? {
                       borderColor: c.border,
                       backgroundColor: `${c.border}22`,
@@ -85,7 +93,7 @@ export function LightMenu({
                 <span
                   className="h-3 w-3"
                   style={{
-                    backgroundColor: isOn
+                    backgroundColor: showAsOn
                       ? c.border
                       : "rgba(255,255,255,0.3)",
                   }}

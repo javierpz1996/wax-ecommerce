@@ -13,10 +13,10 @@ export function WhatsappButton({
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        className="group relative w-full max-w-[260px]"
+        className="group relative w-full max-w-[300px]"
       >
         {/* Glow exterior */}
-        <div className="absolute -inset-[2px] rounded-xl bg-gradient-to-r from-green-400 via-green-500 to-emerald-500 opacity-70 blur-md transition duration-300 group-hover:opacity-100" />
+        <div className="absolute -inset-[3px] rounded-xl bg-gradient-to-r from-green-400 via-green-500 to-emerald-500 opacity-70 blur-md transition duration-300 group-hover:opacity-100" />
 
         {/* Botón */}
         <div
@@ -25,12 +25,12 @@ export function WhatsappButton({
             flex
             items-center
             justify-center
-            gap-2
+            gap-3
             rounded-xl
             bg-black
-            px-6
-            py-3
-            text-sm
+            px-7
+            py-4
+            text-base
             font-bold
             tracking-wide
             border border-white/10
@@ -39,10 +39,10 @@ export function WhatsappButton({
             group-hover:scale-105
           "
         >
-          {/* Icono WhatsApp real */}
+          {/* Icono WhatsApp */}
           <svg
             viewBox="0 0 32 32"
-            className="h-4 w-4 text-green-400 drop-shadow-[0_0_6px_#22c55e]"
+            className="h-5 w-5 text-green-400 drop-shadow-[0_0_6px_#22c55e]"
             aria-hidden="true"
           >
             <path

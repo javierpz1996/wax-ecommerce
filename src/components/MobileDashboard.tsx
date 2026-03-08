@@ -7,9 +7,11 @@ import {
   CurrentNumberDisplay,
   WhatsappButton,
 } from "./dashboard";
+import { useLightMenuEnabled } from "../hooks/useLightMenuEnabled";
 
 export function MobileDashboard() {
   const [activeLight, setActiveLight] = useState<number | null>(0);
+  const { enabled } = useLightMenuEnabled();
 
   const handleToggle = (index: number) => {
     setActiveLight((prev) => (prev === index ? null : index));
@@ -25,6 +27,7 @@ export function MobileDashboard() {
       count={5}
       activeIndex={activeLight}
       onToggle={handleToggle}
+      enabled={enabled}
     />
   
     <CurrentNumberDisplay number="+541152357094" />

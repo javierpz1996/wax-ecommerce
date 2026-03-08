@@ -36,6 +36,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# persisted state (server-side, not in repo)
+/data/lights.json
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
