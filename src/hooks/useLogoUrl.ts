@@ -39,11 +39,28 @@ export function useLogoUrl() {
     }
   }, []);
 
+  const uploadLogo = useCallback(async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append("file", file);
+    const res = await fetch("/api/logo/upload", {
+      method: "POST",
+      body: formData,
+    });
+    if (!res.ok) {
+      const data = (await res.json()) as { error?: string };
+      throw new Error(data.error ?? "Error al subir");
+    }
+    const data = (await res.json()) as { url: string };
+    setUrl(data.url);
+    return data.url;
+  }, []);
+
   const displayUrl = url && url.trim() !== "" ? url : null;
   return {
     logoUrl: displayUrl ?? DEFAULT_LOGO,
     storedUrl: displayUrl,
     setLogoUrl,
+    uploadLogo,
     loading,
   };
 }

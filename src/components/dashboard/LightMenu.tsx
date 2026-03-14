@@ -74,20 +74,36 @@ export function LightMenu({
                       `,
                     }
                   : {
-                      borderColor: "var(--pac-outline)",
+                      borderColor: "rgba(255,255,255,0.2)",
                       backgroundColor: "black",
                     }
               }
             >
+              {!showAsOn && (
+                <span
+                  className="pointer-events-none absolute inset-0 bg-black/50 rounded-[2px]"
+                  aria-hidden
+                />
+              )}
               {iconSrc ? (
-                <span className="relative block size-8 md:size-10">
-                  <Image
-                    src={iconSrc}
-                    alt={`Ícono ${index + 1}`}
-                    fill
-                    sizes="(max-width: 768px) 32px, 40px"
-                    className="object-contain"
-                  />
+                <span
+                  className={`relative block size-8 md:size-10 ${!showAsOn ? "opacity-50" : ""}`}
+                >
+                  {iconSrc.startsWith("http://") || iconSrc.startsWith("https://") ? (
+                    <img
+                      src={iconSrc}
+                      alt={`Ícono ${index + 1}`}
+                      className="size-full object-contain"
+                    />
+                  ) : (
+                    <Image
+                      src={iconSrc}
+                      alt={`Ícono ${index + 1}`}
+                      fill
+                      sizes="(max-width: 768px) 32px, 40px"
+                      className="object-contain"
+                    />
+                  )}
                 </span>
               ) : (
                 <span

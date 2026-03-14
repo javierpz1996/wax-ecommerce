@@ -1,4 +1,5 @@
 export { NewsTicker } from "./NewsTicker";
+export { NewsTickerWithConfig } from "./NewsTickerWithConfig";
 export { BrandLogo } from "./BrandLogo";
 export { LightMenu } from "./LightMenu";
 export { CurrentNumberDisplay } from "./CurrentNumberDisplay";

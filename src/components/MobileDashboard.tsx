@@ -7,13 +7,18 @@ import {
   CurrentNumberDisplay,
   WhatsappButton,
 } from "./dashboard";
+import { useLightIcons } from "../hooks/useLightIcons";
 import { useLightMenuEnabled } from "../hooks/useLightMenuEnabled";
 import { useLogoUrl } from "../hooks/useLogoUrl";
+import { useWhatsappNumber } from "../hooks/useWhatsappNumber";
 
 export function MobileDashboard() {
   const [activeLight, setActiveLight] = useState<number | null>(0);
   const { enabled } = useLightMenuEnabled();
   const { logoUrl } = useLogoUrl();
+  const { icons } = useLightIcons();
+  const { number: whatsappNumber, whatsappHref, label: whatsappLabel } =
+    useWhatsappNumber();
 
   const handleToggle = (index: number) => {
     setActiveLight((prev) => (prev === index ? null : index));
@@ -29,12 +34,13 @@ export function MobileDashboard() {
       count={5}
       activeIndex={activeLight}
       onToggle={handleToggle}
+      icons={icons}
       enabled={enabled}
     />
   
-    <CurrentNumberDisplay number="+541152357094" />
+    <CurrentNumberDisplay number={whatsappNumber} />
   
-    <WhatsappButton href="https://wa.me/541152357094" />
+    <WhatsappButton href={whatsappHref} label={whatsappLabel} />
   
   </div>
   );
