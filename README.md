@@ -40,7 +40,7 @@ El estado de las luces del menú se guarda en Supabase para que funcione en Verc
    NEXT_PUBLIC_SUPABASE_URL=https://tu-proyecto.supabase.co
    NEXT_PUBLIC_SUPABASE_ANON_KEY=tu-anon-key
    ```
-4. En Supabase: **SQL Editor** → ejecutá las migraciones en orden: `20250305000000_create_lights_state.sql`, `20250305000001_create_logo_config.sql`, `20250314000000_create_news_ticker_config.sql`, `20250314000002_create_light_icons_config.sql`, `20250314000003_create_whatsapp_number_config.sql`.
+4. En Supabase: **SQL Editor** → ejecutá las migraciones en orden: `20250305000000_create_lights_state.sql`, `20250305000001_create_logo_config.sql`, `20250314000000_create_news_ticker_config.sql`, `20250314000002_create_light_icons_config.sql`, `20250314000003_create_whatsapp_number_config.sql`, `20250314000006_create_email_subscriptions.sql`.
 5. **Storage (logo por imagen):** en Supabase → **Storage** → **New bucket**. Nombre: `logos`. Marcá **Public bucket**. Después, en **SQL Editor**, ejecutá `supabase/migrations/20250314000001_storage_logos_policies.sql` para permitir subir imágenes desde el panel.
 6. En Vercel: añadí las mismas variables en **Settings → Environment Variables**.
 

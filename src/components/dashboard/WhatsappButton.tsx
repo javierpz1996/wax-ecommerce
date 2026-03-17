@@ -8,7 +8,7 @@ export function WhatsappButton({
   href = "https://wa.me/5491112345678",
 }: WhatsappButtonProps) {
   return (
-    <div className="mt-6 flex justify-center">
+    <div className="mt-0 md:mt-6 flex justify-center">
       <a
         href={href}
         target="_blank"

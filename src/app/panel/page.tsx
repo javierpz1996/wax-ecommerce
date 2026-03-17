@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLightIcons } from "../../hooks/useLightIcons";
 import { useLightMenuEnabled } from "../../hooks/useLightMenuEnabled";
 import { useLogoUrl } from "../../hooks/useLogoUrl";
@@ -69,6 +69,13 @@ export default function PanelPage() {
   const [whatsappLabelInput, setWhatsappLabelInput] = useState("");
   const [whatsappLabelSaving, setWhatsappLabelSaving] = useState(false);
   const [whatsappLabelMessage, setWhatsappLabelMessage] = useState<"ok" | "error" | null>(null);
+
+  const [subsLoading, setSubsLoading] = useState(true);
+  const [subsCount, setSubsCount] = useState<number>(0);
+  const [subsEmails, setSubsEmails] = useState<string[]>([]);
+  const [subsMessage, setSubsMessage] = useState<"copied" | "error" | null>(
+    null
+  );
 
   const handleTickerSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -194,8 +201,38 @@ export default function PanelPage() {
     }
   };
 
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const res = await fetch("/api/subscriptions");
+        if (res.ok) {
+          const data = (await res.json()) as {
+            count?: number;
+            emails?: string[];
+          };
+          setSubsCount(typeof data.count === "number" ? data.count : 0);
+          setSubsEmails(Array.isArray(data.emails) ? data.emails : []);
+        }
+      } finally {
+        setSubsLoading(false);
+      }
+    };
+    load();
+  }, []);
+
+  const handleCopySubsEmails = async () => {
+    setSubsMessage(null);
+    try {
+      const text = subsEmails.join(", ");
+      await navigator.clipboard.writeText(text);
+      setSubsMessage("copied");
+    } catch {
+      setSubsMessage("error");
+    }
+  };
+
   return (
-    <div className="mx-auto flex min-h-screen max-w-md flex-col gap-8 px-6 py-10">
+    <div className="mx-auto flex min-h-dvh max-w-md flex-col gap-8 px-6 py-10">
       <div className="flex items-center justify-between">
         <h1 className="font-pixelify text-2xl uppercase tracking-widest text-[var(--pac-yellow)]">
           Panel
@@ -582,6 +619,45 @@ export default function PanelPage() {
             </li>
           ))}
         </ul>
+      </section>
+
+      <section className="rounded-lg border-t border-white/15 bg-[var(--pac-screen)] p-6 shadow-lg">
+        <h2 className="mb-3 font-pixelify text-lg uppercase tracking-wide text-white/90">
+          Email para subscriptores
+        </h2>
+        <p className="mb-4 text-sm text-white/60">
+          Escribí el asunto y el contenido del email que querés enviar a todas las personas que se subscribieron.
+          Más adelante vas a poder usar este texto en tu herramienta de email masivo.
+        </p>
+
+        <div className="space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-white/10 bg-black/20 px-3 py-2">
+            <p className="text-sm text-white/70">
+              Subscriptores:{" "}
+              <span className="font-bold text-white">
+                {subsLoading ? "…" : subsCount}
+              </span>
+            </p>
+            <button
+              type="button"
+              onClick={handleCopySubsEmails}
+              disabled={subsLoading || subsCount === 0}
+              className="rounded-md border border-white/20 bg-black/40 px-3 py-1.5 text-sm text-white/90 transition hover:bg-white/10 disabled:opacity-50"
+            >
+              Copiar emails
+            </button>
+          </div>
+          {subsMessage === "copied" && (
+            <p className="text-xs text-emerald-400">
+              Emails copiados al portapapeles.
+            </p>
+          )}
+          {subsMessage === "error" && (
+            <p className="text-xs text-red-400">
+              No se pudo copiar. Probá de nuevo.
+            </p>
+          )}
+        </div>
       </section>
     </div>
   );

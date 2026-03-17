@@ -53,8 +53,10 @@ export default function RootLayout({
             antialiased
           `}
       >
-        <div className="min-h-full min-h-dvh w-full bg-[var(--pac-dark)] text-white">
-          <main className="mx-auto w-full min-h-full">{children}</main>
+        <div className="flex min-h-screen min-h-dvh w-full justify-center bg-[var(--pac-screen)] text-white">
+          <div className="flex min-h-screen min-h-dvh w-full max-w-md flex-col overflow-y-auto pb-[env(safe-area-inset-bottom)]">
+            <main className="w-full flex-1">{children}</main>
+          </div>
         </div>
       </body>
     </html>

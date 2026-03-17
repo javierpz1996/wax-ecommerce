@@ -3,9 +3,9 @@ import { NewsTickerWithConfig } from "../components/dashboard";
 
 export default function Home() {
   return (
-    <div className="flex min-h-full w-full flex-col bg-[var(--pac-dark)] md:px-6 lg:px-8">
+    <div className="flex w-full flex-col md:px-6 lg:px-8">
       <NewsTickerWithConfig />
-      <div className="flex flex-1 items-center justify-center">
+      <div className="flex flex-1 min-h-[calc(100dvh-3rem)] items-stretch justify-center md:min-h-0 md:items-center md:py-8">
         <MobileDashboard />
       </div>
     </div>

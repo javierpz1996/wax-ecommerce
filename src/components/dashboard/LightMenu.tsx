@@ -35,7 +35,7 @@ export function LightMenu({
         Menú
       </p>
 
-      <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
+      <div className="flex flex-wrap items-center justify-center gap-2.5 mt-5 md:gap-3 md:mt-6">
         {Array.from({ length: count }).map((_, index) => {
           const isEnabled = enabled[index] !== false;
           const iconSrc = iconList[index];
