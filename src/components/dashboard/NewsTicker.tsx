@@ -41,18 +41,21 @@ export function NewsTicker({
       const needed = Math.ceil(viewportWidth / itemWidth) + 2;
       setRepeatCount(Math.max(2, Math.min(12, needed)));
 
-      // Para textos largos (más de 800px), bajamos la velocidad base todavía un poco más.
+      // Base según largo del texto (sin % del panel; si no, el clamp mínimo anula el efecto).
       const isLong = itemWidth > 800;
-      const mult = Math.max(0.25, Math.min(2.5, speedMultiplier));
-      const pxPerSecond = (isLong ? 90 : 190) * mult;
-
-      const seconds = itemWidth / pxPerSecond;
-      setDurationSec(
-        Math.max(
-          isLong ? 7 : 3,
-          Math.min(isLong ? 26 : 16, seconds)
-        )
+      const basePxPerSec = isLong ? 90 : 190;
+      const rawSeconds = itemWidth / basePxPerSec;
+      const clampedBase = Math.max(
+        isLong ? 7 : 3,
+        Math.min(isLong ? 26 : 16, rawSeconds)
       );
+
+      // Velocidad del panel: 100% = 1, 200% = el doble de rápido (mitad de duración).
+      const mult = Math.max(0.25, Math.min(2.5, speedMultiplier));
+      const seconds = clampedBase / mult;
+
+      // Límites finales para evitar animaciones ilegibles o eternas.
+      setDurationSec(Math.min(90, Math.max(0.35, seconds)));
     };
 
     compute();

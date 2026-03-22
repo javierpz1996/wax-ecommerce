@@ -3,6 +3,19 @@
 import { useCallback, useEffect, useState } from "react";
 import { DEFAULT_NEWS_TICKER_SPEED_PERCENT } from "@/lib/newsTickerConstants";
 
+function parseSpeedFromApi(v: unknown): number {
+  if (typeof v === "number" && Number.isFinite(v)) {
+    return Math.min(250, Math.max(25, Math.round(v)));
+  }
+  if (typeof v === "string" && v.trim() !== "") {
+    const n = Number(v.trim());
+    if (Number.isFinite(n)) {
+      return Math.min(250, Math.max(25, Math.round(n)));
+    }
+  }
+  return DEFAULT_NEWS_TICKER_SPEED_PERCENT;
+}
+
 export const DEFAULT_NEWS_TICKER_TEXT =
   "Promos activas esta semana Stock limitado Escríbenos por WhatsApp para pedidos personalizados ";
 
@@ -22,12 +35,7 @@ export function useNewsTickerText() {
           speedPercent?: number;
         };
         setText(data.text ?? null);
-        const sp = data.speedPercent;
-        setSpeedPercent(
-          typeof sp === "number" && Number.isFinite(sp)
-            ? Math.min(250, Math.max(25, Math.round(sp)))
-            : DEFAULT_NEWS_TICKER_SPEED_PERCENT
-        );
+        setSpeedPercent(parseSpeedFromApi(data.speedPercent));
       }
     } catch {
       setText(null);
@@ -56,8 +64,8 @@ export function useNewsTickerText() {
           speedPercent?: number;
         };
         setText(data.text ?? null);
-        if (typeof data.speedPercent === "number") {
-          setSpeedPercent(data.speedPercent);
+        if (data.speedPercent !== undefined) {
+          setSpeedPercent(parseSpeedFromApi(data.speedPercent));
         }
       } else {
         setText(newText);
@@ -74,12 +82,14 @@ export function useNewsTickerText() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ speedPercent: clamped }),
     });
+    const data = (await res.json()) as { speedPercent?: unknown; error?: string };
     if (!res.ok) {
-      throw new Error("No se pudo guardar la velocidad");
+      throw new Error(
+        typeof data.error === "string" ? data.error : "No se pudo guardar la velocidad"
+      );
     }
-    const data = (await res.json()) as { speedPercent?: number };
-    if (typeof data.speedPercent === "number") {
-      setSpeedPercent(data.speedPercent);
+    if (data.speedPercent !== undefined) {
+      setSpeedPercent(parseSpeedFromApi(data.speedPercent));
     } else {
       setSpeedPercent(clamped);
     }

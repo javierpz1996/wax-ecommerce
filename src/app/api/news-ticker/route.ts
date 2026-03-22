@@ -44,10 +44,9 @@ export async function PATCH(request: Request) {
       text: updated.text,
       speedPercent: updated.speedPercent,
     });
-  } catch {
-    return NextResponse.json(
-      { error: "Error al guardar el news ticker" },
-      { status: 500 }
-    );
+  } catch (e) {
+    const message =
+      e instanceof Error ? e.message : "Error al guardar el news ticker";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
