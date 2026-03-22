@@ -4,10 +4,13 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 type NewsTickerProps = {
   text?: string;
+  /** 1 = 100% (por defecto). Menos = más lento, más = más rápido. */
+  speedMultiplier?: number;
 };
 
 export function NewsTicker({
   text = "Promos activas esta semana Stock limitado Escríbenos por WhatsApp para pedidos personalizados ",
+  speedMultiplier = 1,
 }: NewsTickerProps) {
   const viewportRef = useRef<HTMLDivElement | null>(null);
   const itemRef = useRef<HTMLSpanElement | null>(null);
@@ -40,7 +43,8 @@ export function NewsTicker({
 
       // Para textos largos (más de 800px), bajamos la velocidad base todavía un poco más.
       const isLong = itemWidth > 800;
-      const pxPerSecond = isLong ? 90 : 190;
+      const mult = Math.max(0.25, Math.min(2.5, speedMultiplier));
+      const pxPerSecond = (isLong ? 90 : 190) * mult;
 
       const seconds = itemWidth / pxPerSecond;
       setDurationSec(
@@ -57,7 +61,7 @@ export function NewsTicker({
     ro.observe(el);
     ro.observe(viewport);
     return () => ro.disconnect();
-  }, [normalizedText]);
+  }, [normalizedText, speedMultiplier]);
 
   return (
     <div

@@ -1,13 +1,17 @@
 import { NextResponse } from "next/server";
 import {
-  readNewsTickerText,
+  readNewsTickerConfig,
+  writeNewsTickerSpeedPercent,
   writeNewsTickerText,
 } from "@/lib/newsTicker";
 
 export async function GET() {
   try {
-    const text = await readNewsTickerText();
-    return NextResponse.json({ text });
+    const cfg = await readNewsTickerConfig();
+    return NextResponse.json({
+      text: cfg.text,
+      speedPercent: cfg.speedPercent,
+    });
   } catch {
     return NextResponse.json(
       { error: "Error al leer el news ticker" },
@@ -18,12 +22,28 @@ export async function GET() {
 
 export async function PATCH(request: Request) {
   try {
-    const body = (await request.json()) as { text?: string | null };
-    const text =
-      body.text === undefined ? null : body.text === "" ? null : String(body.text);
-    await writeNewsTickerText(text);
-    const updated = await readNewsTickerText();
-    return NextResponse.json({ text: updated });
+    const body = (await request.json()) as {
+      text?: string | null;
+      speedPercent?: number;
+    };
+
+    if (body.text !== undefined) {
+      const text =
+        body.text === null || body.text === ""
+          ? null
+          : String(body.text);
+      await writeNewsTickerText(text);
+    }
+
+    if (body.speedPercent !== undefined) {
+      await writeNewsTickerSpeedPercent(Number(body.speedPercent));
+    }
+
+    const updated = await readNewsTickerConfig();
+    return NextResponse.json({
+      text: updated.text,
+      speedPercent: updated.speedPercent,
+    });
   } catch {
     return NextResponse.json(
       { error: "Error al guardar el news ticker" },

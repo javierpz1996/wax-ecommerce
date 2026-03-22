@@ -5,7 +5,11 @@ import { useEffect, useRef, useState } from "react";
 import { useLightIcons } from "../../hooks/useLightIcons";
 import { useLightMenuEnabled } from "../../hooks/useLightMenuEnabled";
 import { useLogoUrl } from "../../hooks/useLogoUrl";
-import { useNewsTickerText } from "../../hooks/useNewsTickerText";
+import {
+  DEFAULT_NEWS_TICKER_TEXT,
+  useNewsTickerText,
+} from "../../hooks/useNewsTickerText";
+import { NewsTicker } from "../../components/dashboard/NewsTicker";
 import { useWhatsappNumber } from "../../hooks/useWhatsappNumber";
 
 const LIGHT_LABELS = ["Botón 1", "Botón 2", "Botón 3", "Botón 4", "Botón 5"];
@@ -49,11 +53,18 @@ export default function PanelPage() {
   const {
     storedText: tickerStoredText,
     setNewsTickerText,
+    speedPercent: tickerSpeedPercent,
+    setNewsTickerSpeedPercent,
     loading: tickerLoading,
   } = useNewsTickerText();
   const [tickerInput, setTickerInput] = useState("");
   const [tickerSaving, setTickerSaving] = useState(false);
   const [tickerMessage, setTickerMessage] = useState<"ok" | "error" | null>(null);
+  const [tickerSpeedDraft, setTickerSpeedDraft] = useState(100);
+  const [tickerSpeedSaving, setTickerSpeedSaving] = useState(false);
+  const [tickerSpeedMessage, setTickerSpeedMessage] = useState<
+    "ok" | "error" | null
+  >(null);
 
   const {
     number: whatsappNumber,
@@ -61,6 +72,9 @@ export default function PanelPage() {
     setNumber: setWhatsappNumber,
     storedLabel: whatsappStoredLabel,
     setLabel: setWhatsappLabel,
+    storedIconUrl: whatsappStoredIconUrl,
+    setIconUrl: setWhatsappIconUrl,
+    uploadWhatsappIcon,
     loading: whatsappLoading,
   } = useWhatsappNumber();
   const [whatsappInput, setWhatsappInput] = useState("");
@@ -69,6 +83,13 @@ export default function PanelPage() {
   const [whatsappLabelInput, setWhatsappLabelInput] = useState("");
   const [whatsappLabelSaving, setWhatsappLabelSaving] = useState(false);
   const [whatsappLabelMessage, setWhatsappLabelMessage] = useState<"ok" | "error" | null>(null);
+  const [whatsappIconInput, setWhatsappIconInput] = useState("");
+  const [whatsappIconSaving, setWhatsappIconSaving] = useState(false);
+  const [whatsappIconUploading, setWhatsappIconUploading] = useState(false);
+  const [whatsappIconMessage, setWhatsappIconMessage] = useState<
+    "ok" | "error" | null
+  >(null);
+  const whatsappIconFileInputRef = useRef<HTMLInputElement | null>(null);
 
   const [subsLoading, setSubsLoading] = useState(true);
   const [subsCount, setSubsCount] = useState<number>(0);
@@ -92,6 +113,26 @@ export default function PanelPage() {
       setTickerSaving(false);
     }
   };
+
+  const handleTickerSpeedSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setTickerSpeedMessage(null);
+    setTickerSpeedSaving(true);
+    try {
+      await setNewsTickerSpeedPercent(tickerSpeedDraft);
+      setTickerSpeedMessage("ok");
+    } catch {
+      setTickerSpeedMessage("error");
+    } finally {
+      setTickerSpeedSaving(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!tickerLoading) {
+      setTickerSpeedDraft(tickerSpeedPercent);
+    }
+  }, [tickerLoading, tickerSpeedPercent]);
 
   const handleLogoSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -201,6 +242,42 @@ export default function PanelPage() {
     }
   };
 
+  const handleWhatsappIconSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setWhatsappIconMessage(null);
+    setWhatsappIconSaving(true);
+    try {
+      const url = whatsappIconInput.trim() || null;
+      await setWhatsappIconUrl(url);
+      setWhatsappIconMessage("ok");
+      if (!url) setWhatsappIconInput("");
+    } catch {
+      setWhatsappIconMessage("error");
+    } finally {
+      setWhatsappIconSaving(false);
+    }
+  };
+
+  const handleWhatsappIconFileChange = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setWhatsappIconMessage(null);
+    setWhatsappIconUploading(true);
+    try {
+      await uploadWhatsappIcon(file);
+      setWhatsappIconMessage("ok");
+      setWhatsappIconInput("");
+      e.target.value = "";
+    } catch {
+      setWhatsappIconMessage("error");
+      e.target.value = "";
+    } finally {
+      setWhatsappIconUploading(false);
+    }
+  };
+
   useEffect(() => {
     const load = async () => {
       try {
@@ -230,6 +307,16 @@ export default function PanelPage() {
       setSubsMessage("error");
     }
   };
+
+  const tickerPreviewText =
+    tickerInput.trim() || tickerStoredText || DEFAULT_NEWS_TICKER_TEXT;
+
+  const tickerSpeedDescription =
+    tickerSpeedDraft === 100
+      ? "Velocidad normal"
+      : tickerSpeedDraft < 100
+        ? "Más lento que el predeterminado"
+        : "Más rápido que el predeterminado";
 
   return (
     <div className="mx-auto flex min-h-dvh max-w-md flex-col gap-8 px-6 py-10">
@@ -370,6 +457,113 @@ export default function PanelPage() {
             <p className="text-sm text-red-400">No se pudo guardar.</p>
           )}
         </form>
+
+        <div className="mt-8 rounded-xl border border-white/15 bg-black/35 p-4 shadow-inner">
+          <h3 className="mb-1 font-pixelify text-sm uppercase tracking-wide text-white/90">
+            Velocidad del ticker
+          </h3>
+          <p className="mb-4 text-xs text-white/55">
+            100% es la velocidad base. Subí el porcentaje para que se mueva más
+            rápido, o bajalo para que vaya más lento. Guardá para aplicar en la
+            página principal.
+          </p>
+
+          <form onSubmit={handleTickerSpeedSubmit} className="space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="text-2xl font-bold tabular-nums text-[var(--pac-yellow)]">
+                  {tickerSpeedDraft}%
+                </p>
+                <p className="text-xs text-white/50">{tickerSpeedDescription}</p>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  disabled={tickerLoading || tickerSpeedDraft <= 25}
+                  onClick={() =>
+                    setTickerSpeedDraft((v) => Math.max(25, v - 10))
+                  }
+                  className="rounded-md border border-white/25 bg-black/50 px-3 py-1.5 text-sm text-white transition hover:bg-white/10 disabled:opacity-40"
+                >
+                  −10
+                </button>
+                <button
+                  type="button"
+                  disabled={tickerLoading || tickerSpeedDraft >= 250}
+                  onClick={() =>
+                    setTickerSpeedDraft((v) => Math.min(250, v + 10))
+                  }
+                  className="rounded-md border border-white/25 bg-black/50 px-3 py-1.5 text-sm text-white transition hover:bg-white/10 disabled:opacity-40"
+                >
+                  +10
+                </button>
+                <button
+                  type="button"
+                  disabled={tickerLoading}
+                  onClick={() => setTickerSpeedDraft(100)}
+                  className="text-xs text-white/50 underline hover:text-white disabled:opacity-40"
+                >
+                  Reset 100%
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="ticker-speed-range"
+                className="mb-1 block text-xs text-white/60"
+              >
+                Ajuste fino (25% – 250%)
+              </label>
+              <input
+                id="ticker-speed-range"
+                type="range"
+                min={25}
+                max={250}
+                step={1}
+                value={tickerSpeedDraft}
+                disabled={tickerLoading}
+                onChange={(e) =>
+                  setTickerSpeedDraft(Number(e.target.value))
+                }
+                className="h-2 w-full cursor-pointer accent-[var(--pac-yellow)] disabled:opacity-50"
+              />
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3">
+              <button
+                type="submit"
+                disabled={tickerLoading || tickerSpeedSaving}
+                className="rounded-md bg-[var(--pac-yellow)] px-4 py-2 text-sm font-bold text-black transition hover:opacity-90 disabled:opacity-50"
+              >
+                {tickerSpeedSaving ? "Guardando…" : "Guardar velocidad"}
+              </button>
+              {tickerSpeedPercent !== tickerSpeedDraft && !tickerLoading && (
+                <span className="text-xs text-amber-300/90">
+                  Cambios sin guardar
+                </span>
+              )}
+            </div>
+            {tickerSpeedMessage === "ok" && (
+              <p className="text-sm text-emerald-400">Velocidad guardada.</p>
+            )}
+            {tickerSpeedMessage === "error" && (
+              <p className="text-sm text-red-400">No se pudo guardar.</p>
+            )}
+          </form>
+
+          <div className="mt-6 border-t border-white/10 pt-4">
+            <p className="mb-2 text-xs font-medium uppercase tracking-wider text-white/50">
+              Vista previa (usa el texto de arriba y la velocidad del control)
+            </p>
+            <div className="overflow-hidden rounded-lg border border-pink-500/20 bg-black/60">
+              <NewsTicker
+                text={tickerPreviewText}
+                speedMultiplier={tickerSpeedDraft / 100}
+              />
+            </div>
+          </div>
+        </div>
       </section>
 
       <section className="rounded-lg bg-[var(--pac-screen)] p-6 shadow-lg">
@@ -471,6 +665,75 @@ export default function PanelPage() {
             <p className="text-sm text-red-400">No se pudo guardar.</p>
           )}
         </form>
+
+        <p className="mb-2 mt-6 text-sm text-white/60">
+          Ícono del botón (igual que el menú: URL o imagen desde galería / PC).
+        </p>
+        <div className="rounded-lg border border-green-500/30 bg-green-500/10 px-4 py-3">
+          <input
+            ref={whatsappIconFileInputRef}
+            type="file"
+            accept="image/png,image/jpeg,image/webp,image/gif"
+            onChange={handleWhatsappIconFileChange}
+            className="hidden"
+            aria-hidden
+          />
+          <button
+            type="button"
+            onClick={() => whatsappIconFileInputRef.current?.click()}
+            disabled={whatsappLoading || whatsappIconUploading}
+            className="mb-3 w-full rounded-md border border-dashed border-white/30 bg-black/30 py-3 text-sm text-white/80 transition hover:border-green-400/60 hover:bg-black/40 disabled:opacity-50"
+          >
+            {whatsappIconUploading ? "Subiendo…" : "Elegir imagen del ícono"}
+          </button>
+          <form onSubmit={handleWhatsappIconSubmit} className="space-y-3">
+            <input
+              type="url"
+              value={whatsappIconInput}
+              onChange={(e) => setWhatsappIconInput(e.target.value)}
+              onFocus={() =>
+                !whatsappLoading &&
+                setWhatsappIconInput(whatsappStoredIconUrl ?? "")
+              }
+              placeholder={
+                whatsappLoading
+                  ? "Cargando…"
+                  : whatsappStoredIconUrl || "https://…/icono.png"
+              }
+              className="w-full rounded-md border border-white/20 bg-black/40 px-3 py-2 text-sm text-white placeholder-white/40 outline-none focus:border-[var(--pac-yellow)]"
+              disabled={whatsappLoading}
+            />
+            <div className="flex flex-wrap items-center gap-3">
+              <button
+                type="submit"
+                disabled={whatsappLoading || whatsappIconSaving}
+                className="rounded-md bg-[var(--pac-yellow)] px-4 py-2 text-sm font-bold text-black transition hover:opacity-90 disabled:opacity-50"
+              >
+                {whatsappIconSaving ? "Guardando…" : "Guardar URL del ícono"}
+              </button>
+              {whatsappStoredIconUrl && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setWhatsappIconInput("");
+                    setWhatsappIconUrl(null);
+                    setWhatsappIconMessage("ok");
+                  }}
+                  disabled={whatsappLoading || whatsappIconSaving}
+                  className="text-sm text-white/60 underline hover:text-white disabled:opacity-50"
+                >
+                  Ícono por defecto (SVG WhatsApp)
+                </button>
+              )}
+            </div>
+            {whatsappIconMessage === "ok" && (
+              <p className="text-sm text-emerald-400">Ícono actualizado.</p>
+            )}
+            {whatsappIconMessage === "error" && (
+              <p className="text-sm text-red-400">No se pudo guardar.</p>
+            )}
+          </form>
+        </div>
       </section>
 
       <section className="rounded-lg bg-[var(--pac-screen)] p-6 shadow-lg">

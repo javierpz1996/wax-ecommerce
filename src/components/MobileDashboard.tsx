@@ -18,8 +18,12 @@ export function MobileDashboard() {
   const { enabled } = useLightMenuEnabled();
   const { logoUrl } = useLogoUrl();
   const { icons } = useLightIcons();
-  const { number: whatsappNumber, whatsappHref, label: whatsappLabel } =
-    useWhatsappNumber();
+  const {
+    number: whatsappNumber,
+    whatsappHref,
+    label: whatsappLabel,
+    iconUrl: whatsappIconUrl,
+  } = useWhatsappNumber();
 
   const handleToggle = (index: number) => {
     setActiveLight((prev) => (prev === index ? null : index));
@@ -42,7 +46,11 @@ export function MobileDashboard() {
     <div className="mt-10 md:mt-12 flex flex-col items-center gap-6 md:gap-7">
       <CurrentNumberDisplay number={whatsappNumber} />
       <div className="mt-6 md:mt-8 w-full flex justify-center">
-        <WhatsappButton href={whatsappHref} label={whatsappLabel} />
+        <WhatsappButton
+          href={whatsappHref}
+          label={whatsappLabel}
+          iconUrl={whatsappIconUrl}
+        />
       </div>
       <div className="mt-8 md:mt-10 w-full flex justify-center">
         <SubscripcionEmail />

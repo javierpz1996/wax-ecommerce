@@ -85,3 +85,34 @@ export async function uploadIconFile(
   } = supabase.storage.from(BUCKET).getPublicUrl(path);
   return publicUrl;
 }
+
+/**
+ * Ícono del botón WhatsApp en el bucket "logos".
+ */
+export async function uploadWhatsappIconFile(
+  supabase: SupabaseClient,
+  file: File
+): Promise<string> {
+  if (!ALLOWED_TYPES.includes(file.type)) {
+    throw new Error(
+      "Tipo de archivo no permitido. Usá PNG, JPEG, WebP o GIF."
+    );
+  }
+  if (file.size > MAX_SIZE_BYTES) {
+    throw new Error("La imagen no puede superar 2 MB.");
+  }
+  const ext = getExtension(file.type);
+  const path = `whatsapp-${Date.now()}.${ext}`;
+
+  const { error } = await supabase.storage.from(BUCKET).upload(path, file, {
+    cacheControl: "3600",
+    upsert: false,
+  });
+
+  if (error) throw error;
+
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from(BUCKET).getPublicUrl(path);
+  return publicUrl;
+}
