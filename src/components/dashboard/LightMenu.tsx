@@ -32,10 +32,10 @@ export function LightMenu({
   return (
     <div className="space-y-3 md:space-y-4 text-center">
       <p className="text-lg font-pixelify font-medium uppercase tracking-widest text-[var(--pac-yellow)]">
-        Menú
+        Menú actual
       </p>
 
-      <div className="flex flex-wrap items-center justify-center gap-2.5 mt-5 md:gap-3 md:mt-6">
+      <div className="mt-5 flex flex-wrap items-center justify-center gap-2.5 md:mt-6 md:gap-3 lg:gap-4">
         {Array.from({ length: count }).map((_, index) => {
           const isEnabled = enabled[index] !== false;
           const iconSrc = iconList[index];
@@ -59,7 +59,7 @@ export function LightMenu({
               type="button"
               disabled={!isEnabled}
               onClick={() => isEnabled && onToggle(index)}
-              className="relative flex size-11 md:size-12 items-center justify-center overflow-hidden border-2 transition-all duration-300"
+              className="relative flex size-11 items-center justify-center overflow-hidden border-2 transition-all duration-300 md:size-12 lg:size-14"
               style={
                 showAsOn
                   ? {
@@ -87,7 +87,7 @@ export function LightMenu({
               )}
               {iconSrc ? (
                 <span
-                  className={`relative block size-8 md:size-10 ${!showAsOn ? "opacity-50" : ""}`}
+                  className={`relative block size-8 md:size-10 lg:size-11 ${!showAsOn ? "opacity-50" : ""}`}
                 >
                   {iconSrc.startsWith("http://") || iconSrc.startsWith("https://") ? (
                     <img
@@ -100,7 +100,7 @@ export function LightMenu({
                       src={iconSrc}
                       alt={`Ícono ${index + 1}`}
                       fill
-                      sizes="(max-width: 768px) 32px, 40px"
+                      sizes="(max-width: 768px) 32px, (max-width: 1024px) 40px, 44px"
                       className="object-contain"
                     />
                   )}

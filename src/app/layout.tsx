@@ -53,9 +53,15 @@ export default function RootLayout({
             antialiased
           `}
       >
-        <div className="flex min-h-screen min-h-dvh w-full justify-center bg-[var(--pac-screen)] text-white">
-          <div className="flex min-h-screen min-h-dvh w-full max-w-md flex-col overflow-y-auto pb-[env(safe-area-inset-bottom)]">
-            <main className="w-full flex-1">{children}</main>
+        <div className="flex min-h-screen min-h-dvh w-full justify-center bg-[var(--pac-screen)] text-white md:bg-[radial-gradient(ellipse_120%_80%_at_50%_-20%,rgba(120,40,120,0.12),transparent_50%),var(--pac-screen)] md:py-5 lg:py-8">
+          <div
+            className={`
+              flex min-h-screen min-h-dvh w-full max-w-md flex-col overflow-y-auto pb-[env(safe-area-inset-bottom)]
+              sm:max-w-lg md:max-w-2xl md:rounded-2xl md:shadow-[0_25px_100px_-20px_rgba(0,0,0,0.75)] md:ring-1 md:ring-white/[0.07]
+              lg:max-w-3xl xl:max-w-4xl
+            `}
+          >
+            <main className="w-full flex-1 md:rounded-2xl">{children}</main>
           </div>
         </div>
       </body>

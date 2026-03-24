@@ -21,7 +21,7 @@ export function BrandLogo({
         <img
           src={src}
           alt={alt}
-          className="relative h-41 md:h-52 w-auto object-contain mr-2 drop-shadow-[0_0_30px_rgba(16,185,129,0.8)]"
+          className="relative h-41 w-auto object-contain mr-2 drop-shadow-[0_0_30px_rgba(16,185,129,0.8)] md:h-52 lg:h-56"
         />
       ) : (
         <Image
@@ -29,7 +29,7 @@ export function BrandLogo({
           alt={alt}
           width={260}
           height={260}
-          className="relative h-41 md:h-52 w-auto object-contain mr-2 drop-shadow-[0_0_30px_rgba(16,185,129,0.8)]"
+          className="relative h-41 w-auto object-contain mr-2 drop-shadow-[0_0_30px_rgba(16,185,129,0.8)] md:h-52 lg:h-56"
           priority
         />
       )}

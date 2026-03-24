@@ -35,7 +35,7 @@ export function SubscripcionEmail() {
   };
 
   return (
-    <div className="mt-4 w-full max-w-[300px]">
+    <div className="mt-4 w-full max-w-[min(100%,380px)] md:max-w-md lg:max-w-lg">
       <p className="mb-3 text-center font-pixelify text-sm uppercase tracking-widest text-purple-300">
         Suscripción
       </p>

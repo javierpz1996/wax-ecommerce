@@ -8,55 +8,71 @@ import {
   WhatsappButton,
   SubscripcionEmail,
 } from "./dashboard";
-import { useLightIcons } from "../hooks/useLightIcons";
-import { useLightMenuEnabled } from "../hooks/useLightMenuEnabled";
-import { useLogoUrl } from "../hooks/useLogoUrl";
-import { useWhatsappNumber } from "../hooks/useWhatsappNumber";
 
-export function MobileDashboard() {
+export type MobileDashboardProps = {
+  logoUrl: string;
+  icons: string[];
+  enabled: boolean[];
+  number: string;
+  whatsappHref: string;
+  label: string;
+  iconUrl: string | null;
+  /** Si es false, no se muestra el formulario de suscripción en la home. */
+  showEmailSubscription?: boolean;
+};
+
+export function MobileDashboard({
+  logoUrl,
+  icons,
+  enabled,
+  number,
+  whatsappHref,
+  label,
+  iconUrl,
+  showEmailSubscription = true,
+}: MobileDashboardProps) {
   const [activeLight, setActiveLight] = useState<number | null>(0);
-  const { enabled } = useLightMenuEnabled();
-  const { logoUrl } = useLogoUrl();
-  const { icons } = useLightIcons();
-  const {
-    number: whatsappNumber,
-    whatsappHref,
-    label: whatsappLabel,
-    iconUrl: whatsappIconUrl,
-  } = useWhatsappNumber();
 
   const handleToggle = (index: number) => {
     setActiveLight((prev) => (prev === index ? null : index));
   };
 
   return (
-    <div className="mx-auto flex min-h-full w-full max-w-sm flex-col gap-2 rounded-[0.5rem] bg-[var(--pac-screen)] px-4 py-5 text-white shadow-[0_8px_24px_rgba(0,0,0,0.6)] sm:max-w-md sm:gap-5 md:my-10 md:max-w-lg md:min-h-[820px] md:gap-6 md:px-8 md:py-8 lg:max-w-lg lg:min-h-[900px] lg:gap-6 lg:px-10 lg:py-10">
+    <div
+      className={`
+        mx-auto flex min-h-full w-full max-w-full flex-col gap-2 rounded-[0.5rem] bg-[var(--pac-screen)] px-0 py-5 text-white
+        shadow-[0_8px_24px_rgba(0,0,0,0.6)] sm:max-w-xl sm:gap-5 sm:px-6 sm:py-6
+        md:my-4 md:max-w-2xl md:gap-6 md:px-8 md:py-8 md:shadow-none
+        lg:my-6 lg:max-w-3xl lg:gap-7 lg:px-10 lg:py-10 xl:max-w-4xl xl:px-12
+      `}
+    >
       <div className="flex w-full justify-center">
-      <BrandLogo src={logoUrl} />
-    </div>
-  
-    <LightMenu
-      count={5}
-      activeIndex={activeLight}
-      onToggle={handleToggle}
-      icons={icons}
-      enabled={enabled}
-    />
+        <BrandLogo src={logoUrl} />
+      </div>
 
-    <div className="mt-10 md:mt-12 flex flex-col items-center gap-6 md:gap-7">
-      <CurrentNumberDisplay number={whatsappNumber} />
-      <div className="mt-6 md:mt-8 w-full flex justify-center">
-        <WhatsappButton
-          href={whatsappHref}
-          label={whatsappLabel}
-          iconUrl={whatsappIconUrl}
-        />
-      </div>
-      <div className="mt-8 md:mt-10 w-full flex justify-center">
-        <SubscripcionEmail />
+      <LightMenu
+        count={5}
+        activeIndex={activeLight}
+        onToggle={handleToggle}
+        icons={icons}
+        enabled={enabled}
+      />
+
+      <div className="mt-10 md:mt-12 flex flex-col items-center gap-5 md:gap-6">
+        <CurrentNumberDisplay number={number} />
+        <div className="w-full flex justify-center">
+          <WhatsappButton
+            href={whatsappHref}
+            label={label}
+            iconUrl={iconUrl}
+          />
+        </div>
+        {showEmailSubscription && (
+          <div className="mt-8 md:mt-10 w-full flex justify-center">
+            <SubscripcionEmail />
+          </div>
+        )}
       </div>
     </div>
-  
-  </div>
   );
 }

@@ -33,12 +33,12 @@ export function WhatsappButton({
     (trimmed.startsWith("http://") || trimmed.startsWith("https://"));
 
   return (
-    <div className="mt-0 md:mt-6 flex justify-center">
+    <div className="mt-0 flex justify-center">
       <a
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        className="group relative w-full max-w-[300px]"
+        className="group relative w-full max-w-[min(100%,380px)] md:max-w-[420px] lg:max-w-[480px]"
       >
         {/* Glow exterior */}
         <div className="absolute -inset-[3px] rounded-xl bg-gradient-to-r from-green-400 via-green-500 to-emerald-500 opacity-70 blur-md transition duration-300 group-hover:opacity-100" />
@@ -50,12 +50,14 @@ export function WhatsappButton({
             flex
             items-center
             justify-center
-            gap-3
+            gap-2.5
             rounded-xl
             bg-black
-            px-7
-            py-4
+            px-8
+            py-3
             text-base
+            md:px-10
+            md:py-3.5
             font-bold
             tracking-wide
             border border-white/10

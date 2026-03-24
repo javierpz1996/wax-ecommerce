@@ -68,7 +68,7 @@ export function NewsTicker({
 
   return (
     <div
-      className="overflow-hidden rounded-md py-3 text-[12px] uppercase tracking-widest text-pink-400"
+      className="overflow-hidden rounded-md px-0 py-3 text-[12px] uppercase tracking-widest text-pink-400 sm:px-4 md:px-6 lg:px-8"
       style={{
         background:
           "linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(255,0,150,0.08) 50%, rgba(0,0,0,1) 100%)",

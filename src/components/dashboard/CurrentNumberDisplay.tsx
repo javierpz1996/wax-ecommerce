@@ -4,7 +4,7 @@ type CurrentNumberDisplayProps = {
 
 export function CurrentNumberDisplay({ number }: CurrentNumberDisplayProps) {
   return (
-    <div className="mt-4 md:mt-8 flex flex-col items-center gap-4 md:gap-5">
+    <div className="mt-4 md:mt-6 flex flex-col items-center gap-3 md:gap-4">
       <p className="text-center font-bold font-pixelify uppercase tracking-[0.3em] text-sm text-white/80">
         Número actual
       </p>

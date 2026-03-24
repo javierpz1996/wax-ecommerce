@@ -11,6 +11,7 @@ import {
 } from "../../hooks/useNewsTickerText";
 import { NewsTicker } from "../../components/dashboard/NewsTicker";
 import { useWhatsappNumber } from "../../hooks/useWhatsappNumber";
+import { useAppUiConfig } from "../../hooks/useAppUiConfig";
 
 const LIGHT_LABELS = ["Botón 1", "Botón 2", "Botón 3", "Botón 4", "Botón 5"];
 const LIGHT_COLORS = [
@@ -97,6 +98,25 @@ export default function PanelPage() {
   const [subsMessage, setSubsMessage] = useState<"copied" | "error" | null>(
     null
   );
+
+  const {
+    showEmailSubscription,
+    setShowEmailSubscription,
+    loading: appUiLoading,
+  } = useAppUiConfig();
+  const [subsVisibilityMessage, setSubsVisibilityMessage] = useState<
+    "ok" | "error" | null
+  >(null);
+
+  const handleToggleSubscriptionForm = async () => {
+    setSubsVisibilityMessage(null);
+    try {
+      await setShowEmailSubscription(!showEmailSubscription);
+      setSubsVisibilityMessage("ok");
+    } catch {
+      setSubsVisibilityMessage("error");
+    }
+  };
 
   const handleTickerSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -319,7 +339,7 @@ export default function PanelPage() {
         : "Más rápido que el predeterminado";
 
   return (
-    <div className="mx-auto flex min-h-dvh max-w-md flex-col gap-8 px-6 py-10">
+    <div className="mx-auto flex min-h-dvh max-w-md flex-col gap-8 px-0 py-10 sm:px-6">
       <div className="flex items-center justify-between">
         <h1 className="font-pixelify text-2xl uppercase tracking-widest text-[var(--pac-yellow)]">
           Panel
@@ -892,6 +912,49 @@ export default function PanelPage() {
           Escribí el asunto y el contenido del email que querés enviar a todas las personas que se subscribieron.
           Más adelante vas a poder usar este texto en tu herramienta de email masivo.
         </p>
+
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-fuchsia-500/30 bg-fuchsia-950/20 px-4 py-3">
+          <div>
+            <p className="text-sm font-medium text-white">
+              Formulario de suscripción en la página
+            </p>
+            <p className="text-xs text-white/50">
+              Mostrá u ocultá el bloque donde la gente deja su email en la home.
+            </p>
+          </div>
+          <button
+            type="button"
+            disabled={appUiLoading}
+            onClick={handleToggleSubscriptionForm}
+            className={`relative h-9 w-16 shrink-0 rounded-full transition-colors disabled:opacity-50 ${
+              showEmailSubscription
+                ? "bg-fuchsia-500"
+                : "bg-white/20"
+            }`}
+            aria-pressed={showEmailSubscription}
+            aria-label={
+              showEmailSubscription
+                ? "Ocultar formulario de suscripción"
+                : "Mostrar formulario de suscripción"
+            }
+          >
+            <span
+              className={`absolute top-1 h-7 w-7 rounded-full bg-white shadow transition-transform ${
+                showEmailSubscription ? "left-8" : "left-1"
+              }`}
+            />
+          </button>
+        </div>
+        {subsVisibilityMessage === "ok" && (
+          <p className="-mt-2 mb-4 text-xs text-emerald-400">
+            Preferencia guardada.
+          </p>
+        )}
+        {subsVisibilityMessage === "error" && (
+          <p className="-mt-2 mb-4 text-xs text-red-400">
+            No se pudo guardar. Revisá Supabase o la conexión.
+          </p>
+        )}
 
         <div className="space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-white/10 bg-black/20 px-3 py-2">
