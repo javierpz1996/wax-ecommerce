@@ -40,8 +40,9 @@ export function MobileDashboard({
   return (
     <div
       className={`
-        mx-auto flex min-h-full w-full max-w-full flex-col gap-2 rounded-[0.5rem] bg-[var(--pac-screen)] px-0 py-5 text-white
-        shadow-[0_8px_24px_rgba(0,0,0,0.6)] sm:max-w-xl sm:gap-5 sm:px-6 sm:py-6
+        mx-auto flex min-h-full w-full max-w-full flex-col gap-2 bg-transparent px-0 py-5 text-white
+        rounded-none shadow-none sm:rounded-[0.5rem] sm:bg-[var(--pac-screen)] sm:shadow-[0_8px_24px_rgba(0,0,0,0.6)]
+        sm:max-w-xl sm:gap-5 sm:px-6 sm:py-6
         md:my-4 md:max-w-2xl md:gap-6 md:px-8 md:py-8 md:shadow-none
         lg:my-6 lg:max-w-3xl lg:gap-7 lg:px-10 lg:py-10 xl:max-w-4xl xl:px-12
       `}
@@ -58,9 +59,9 @@ export function MobileDashboard({
         enabled={enabled}
       />
 
-      <div className="mt-10 md:mt-12 flex flex-col items-center gap-5 md:gap-6">
+      <div className="mt-10 md:mt-12 flex flex-col items-center gap-6 md:gap-7">
         <CurrentNumberDisplay number={number} />
-        <div className="w-full flex justify-center">
+        <div className="mt-1 w-full flex justify-center md:mt-0">
           <WhatsappButton
             href={whatsappHref}
             label={label}
